@@ -1,0 +1,1915 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Simply Secure Sign External API",
+    "description": "Simply Secure Sign External API - API for external applications to create packages and documents",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "/ext-api"
+    }
+  ],
+  "paths": {
+    "/api/v1/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logins the user",
+        "requestBody": {
+          "description": "Credentials of the user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Documents/{id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Retrieve information about a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Document Identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Document Identifier",
+              "format": "int32",
+              "example": 868011
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Update information of a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier of the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier of the document",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Document information to be used as new values",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Document"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Deletes a particular document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier for the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the document",
+              "format": "int32",
+              "example": 1104
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Documents/{id}/content": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Download the document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Document Identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Document Identifier",
+              "format": "int32",
+              "example": 868011
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Documents/{id}/fields": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Retrieve the Fields (coordinates) for a Document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier for the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the document",
+              "format": "int32",
+              "example": 27
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentField"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Adds one or more fields (coordinates) to a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier for the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the document",
+              "format": "int32",
+              "example": 21
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The request object containing the fields to be added",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentFieldsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentField"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Documents/{id}/fields/{fieldId}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Retrieve a particular field of a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier for the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the document",
+              "format": "int32",
+              "example": 1993
+            }
+          },
+          {
+            "name": "fieldId",
+            "in": "path",
+            "description": "The indentifier for the field of the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The indentifier for the field of the document",
+              "format": "int32",
+              "example": 20202151
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentField"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Update a field (coordinate) of a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The document identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The document identifier",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fieldId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new field values",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosingPackageCoordinate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Delete a document's field",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier for the document",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the document",
+              "format": "int32",
+              "example": 12090234
+            }
+          },
+          {
+            "name": "fieldId",
+            "in": "path",
+            "description": "The identifier for the field",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier for the field",
+              "format": "int32",
+              "example": 1675309
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Documents/{id}/signers": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get the signers associated to a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Document Identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Document Identifier",
+              "format": "int32",
+              "example": 868011
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Signer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Notifications/{id}": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Retrieve an individial notification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Notification identifier",
+              "format": "int32",
+              "example": 20201231
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Update an existing notification.",
+        "description": "The notification to be modified is identified by the request param's ID property.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A request object with all information to be persisted",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Delete a notification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification identifier",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Notification identifier",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Notifications": {
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Create a new Notification",
+        "requestBody": {
+          "description": "The notification information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Retrieve Notifications",
+        "parameters": [
+          {
+            "name": "officeId",
+            "in": "query",
+            "description": "The office identifier for the notifications",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The office identifier for the notifications",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "notificationType",
+            "in": "query",
+            "description": "The notification type to retrieve",
+            "schema": {
+              "type": "integer",
+              "description": "The notification type to retrieve",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "description": "The target of the notifications",
+            "schema": {
+              "type": "string",
+              "description": "The target of the notifications",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Packages/{id}": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Gets the package by id",
+        "operationId": "GetPackage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Package Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Package Id",
+              "format": "int32",
+              "example": 12001
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Package"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Updates the package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Package Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Package Id",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Package model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Package"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Package"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Delete a package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Packages": {
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Creates a package",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Package"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Packages/{id}/documents": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get the package documents",
+        "operationId": "GetPackageDocuments",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Add a document to the package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "$ref": "#/components/schemas/CreateDocument"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "object",
+                    "description": "Upload File",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Packages/{id}/signers": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get the package signers",
+        "operationId": "GetPackageSigners",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Signer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Adds a signer to the package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Packages/{id}/signers/{signerId}": {
+      "put": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Updates a signer to the package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Closing Package ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Closing Package ID",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "signerId",
+            "in": "path",
+            "description": "Signer ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Signer ID",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Signer Dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Signer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Gets a signer to the package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Closing Package ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Closing Package ID",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "signerId",
+            "in": "path",
+            "description": "Signer ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Signer ID",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Signer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Deletes the package signer.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The identifier.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "signerId",
+            "in": "path",
+            "description": "The signer identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The signer identifier.",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Credentials": {
+        "type": "object",
+        "properties": {
+          "Username": {
+            "type": "string",
+            "description": "Username / Email of the agent",
+            "nullable": true,
+            "example": "test@domain.com"
+          },
+          "Password": {
+            "type": "string",
+            "description": "Password of the agent",
+            "nullable": true,
+            "example": "********"
+          }
+        },
+        "additionalProperties": false,
+        "description": "User credentials"
+      },
+      "AgentType": {
+        "type": "object",
+        "properties": {
+          "AgentTypeID": {
+            "type": "integer",
+            "description": "Gets or sets the agent type identifier.",
+            "format": "int32",
+            "example": 1
+          },
+          "Description": {
+            "type": "string",
+            "description": "Gets or sets the description.",
+            "nullable": true,
+            "example": "Notary"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "AgentID": {
+            "type": "integer",
+            "description": "Agent ID",
+            "format": "int32",
+            "example": 1221
+          },
+          "AgentType": {
+            "$ref": "#/components/schemas/AgentType"
+          },
+          "Username": {
+            "type": "string",
+            "description": "Gets or sets the username.",
+            "nullable": true,
+            "example": "test-user"
+          },
+          "Email": {
+            "type": "string",
+            "description": "Email",
+            "nullable": true,
+            "example": "test@domain.com"
+          },
+          "LoginTicket": {
+            "type": "string",
+            "description": "Login Ticket",
+            "nullable": true,
+            "example": "3dfbb7b2-f9ec-482b-87eb-097d0eaefd32"
+          },
+          "TokenExpiration": {
+            "type": "string",
+            "description": "Token Expiration",
+            "format": "date-time",
+            "example": "2020-12-15T17:57:41.0000000"
+          },
+          "AuthToken": {
+            "type": "string",
+            "description": "Auth Token",
+            "nullable": true,
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtY3VzZXIyQGdldG5hZGEuY29tIiwidW5pcXVlX25hbWUiOiJtY3VzZXIyQGdldG5hZGEuY29tIiwiaXNzIjoiU1NTRXh0QXBpIiwicm9sZSI6Ik5vdGFyeSIsInRpY2tldCI6IjlmNTg5YWQwLTUyMTUtNGJhNS1hYmIzLWEzYWVlZTM1ODE4NiIsImp0aSI6IjcxMDI1YjU1LTI0NWMtNGQzZi1iMTYyLTY1MTI3MjY2ODFmYyIsImlhdCI6MTYwODA2NTg2MSwibmJmIjoxNjA4MDY1ODYxLCJleHAiOjE2MDgwNzMwNjF9.08hZ0LjOvfwtd8z06ltSOyXYHYbKRgbv-3EHkfjllII"
+          }
+        },
+        "additionalProperties": false,
+        "description": "User"
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "LastModified": {
+            "type": "string",
+            "nullable": true
+          },
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ClosingPackageID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsSmartDocument": {
+            "type": "boolean"
+          },
+          "IsPDF": {
+            "type": "boolean"
+          },
+          "IsInk": {
+            "type": "boolean"
+          },
+          "FileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TotalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalCoordinates": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Status": {
+            "type": "string",
+            "nullable": true
+          },
+          "DocumentOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsSignAhead": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DocumentField": {
+        "type": "object",
+        "properties": {
+          "ClosingPackageCoordinateID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Captured": {
+            "type": "boolean"
+          },
+          "CaptureDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CaptureValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsNotary": {
+            "type": "boolean"
+          },
+          "IsSigner": {
+            "type": "boolean"
+          },
+          "IsSignature": {
+            "type": "boolean"
+          },
+          "IsRequired": {
+            "type": "boolean"
+          },
+          "IsPostFill": {
+            "type": "boolean"
+          },
+          "PageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Field": {
+            "type": "string",
+            "nullable": true
+          },
+          "SignerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoordinateType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "Service": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModifyStatuses": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "XPMCoordinate": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastModified": {
+            "type": "string",
+            "nullable": true
+          },
+          "Field": {
+            "type": "string",
+            "nullable": true
+          },
+          "SignerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoordinateType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "Service": {
+            "type": "string",
+            "nullable": true
+          },
+          "CaptureValue": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClosingPackageCoordinate": {
+        "type": "object",
+        "properties": {
+          "ClosingPackageCoordinateID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Captured": {
+            "type": "boolean"
+          },
+          "CaptureDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CaptureValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsNotary": {
+            "type": "boolean"
+          },
+          "IsSigner": {
+            "type": "boolean"
+          },
+          "IsSignature": {
+            "type": "boolean"
+          },
+          "IsRequired": {
+            "type": "boolean"
+          },
+          "IsPostFill": {
+            "type": "boolean"
+          },
+          "PageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Field": {
+            "type": "string",
+            "nullable": true
+          },
+          "SignerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoordinateType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "Service": {
+            "type": "string",
+            "nullable": true
+          },
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastModified": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClosingPackageID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DocumentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ClosingSignerID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Pending": {
+            "$ref": "#/components/schemas/ModifyStatuses"
+          },
+          "DocumentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Height": {
+            "type": "number",
+            "format": "double"
+          },
+          "Width": {
+            "type": "number",
+            "format": "double"
+          },
+          "X": {
+            "type": "number",
+            "format": "double"
+          },
+          "Y": {
+            "type": "number",
+            "format": "double"
+          },
+          "Z": {
+            "type": "number",
+            "format": "double"
+          },
+          "Coordinate": {
+            "$ref": "#/components/schemas/XPMCoordinate"
+          },
+          "AdditionalSigners": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateDocumentFieldsRequest": {
+        "type": "object",
+        "properties": {
+          "Fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClosingPackageCoordinate"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignatureStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "SignerNotificationType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "SignerValidationType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Signer": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Sequence": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/SignatureStatus"
+          },
+          "SignerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prefix": {
+            "type": "string",
+            "nullable": true
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MiddleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Suffix": {
+            "type": "string",
+            "nullable": true
+          },
+          "Street": {
+            "type": "string",
+            "nullable": true
+          },
+          "Street2": {
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "nullable": true
+          },
+          "State": {
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "County": {
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "HomePhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "WorkPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "CellPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "PIN": {
+            "type": "string",
+            "nullable": true
+          },
+          "RequiresNotary": {
+            "type": "boolean"
+          },
+          "NotificationType": {
+            "$ref": "#/components/schemas/SignerNotificationType"
+          },
+          "Activated": {
+            "type": "boolean"
+          },
+          "Consented": {
+            "type": "boolean"
+          },
+          "ConsentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "LoginTicket": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FirstLogin": {
+            "type": "boolean"
+          },
+          "ClosingPackageStreet": {
+            "type": "string",
+            "nullable": true
+          },
+          "SignerNextCoord": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NotaryNextCoord": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "SignAhead": {
+            "type": "boolean"
+          },
+          "Witness": {
+            "type": "boolean"
+          },
+          "AdditionalSignatureVerbiage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Company": {
+            "type": "string",
+            "nullable": true
+          },
+          "ValidationType": {
+            "$ref": "#/components/schemas/SignerValidationType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OfficeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NotificationType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Target": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateNotificationRequest": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OfficeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NotificationType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Target": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateNotificationRequest": {
+        "type": "object",
+        "properties": {
+          "OfficeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NotificationType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Target": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClosingPackageOffice": {
+        "type": "object",
+        "properties": {
+          "Pending": {
+            "type": "integer",
+            "description": "Gets or sets the pending.",
+            "format": "int32"
+          },
+          "ClosingPackageID": {
+            "type": "integer",
+            "description": "Gets or sets the closing package identifier.",
+            "format": "int32"
+          },
+          "OfficeID": {
+            "type": "integer",
+            "description": "Gets or sets the office identifier.",
+            "format": "int32"
+          },
+          "LastModified": {
+            "description": "Gets or sets the last modified.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Closing Package Office"
+      },
+      "Package": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "description": "Gets or sets the identifier.",
+            "format": "int32",
+            "example": 12001
+          },
+          "MLSNumber": {
+            "type": "string",
+            "description": "Gets or sets the MLS number.",
+            "nullable": true,
+            "example": ""
+          },
+          "EscrowNumber": {
+            "type": "string",
+            "description": "Gets or sets the escrow number.",
+            "nullable": true
+          },
+          "TitleNumber": {
+            "type": "string",
+            "description": "Gets or sets the title number.",
+            "nullable": true
+          },
+          "Street": {
+            "type": "string",
+            "description": "Gets or sets the street.",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "description": "Gets or sets the city.",
+            "nullable": true
+          },
+          "State": {
+            "type": "string",
+            "description": "Gets or sets the state.",
+            "nullable": true
+          },
+          "Zip": {
+            "type": "string",
+            "description": "Gets or sets the zip.",
+            "nullable": true
+          },
+          "Status": {
+            "type": "integer",
+            "description": "Gets or sets the status.",
+            "format": "int32"
+          },
+          "Offices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClosingPackageOffice"
+            },
+            "description": "Gets or sets the offices.",
+            "nullable": true
+          },
+          "SignAhead": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether [sign ahead]."
+          },
+          "RequireViewAllPages": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether [require view all pages]."
+          },
+          "AllowIDFailureOverride": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether [allow identifier failure override]."
+          },
+          "TitleNumberNoPrefix": {
+            "type": "string",
+            "description": "Gets or sets the title number no prefix.",
+            "nullable": true
+          },
+          "ClosingRoomInfo": {
+            "description": "Gets or sets the closing room information.",
+            "nullable": true
+          },
+          "PackageExtra": {
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Closing package"
+      },
+      "CreateDocument": {
+        "type": "object",
+        "properties": {
+          "SplitDoc": {
+            "type": "boolean"
+          },
+          "IsSignAhead": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignerDto": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Sequence": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/SignatureStatus"
+          },
+          "SignerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prefix": {
+            "type": "string",
+            "nullable": true
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MiddleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Suffix": {
+            "type": "string",
+            "nullable": true
+          },
+          "Street": {
+            "type": "string",
+            "nullable": true
+          },
+          "Street2": {
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "nullable": true
+          },
+          "State": {
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "County": {
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "HomePhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "WorkPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "CellPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "PIN": {
+            "type": "string",
+            "nullable": true
+          },
+          "RequiresNotary": {
+            "type": "boolean"
+          },
+          "NotificationType": {
+            "$ref": "#/components/schemas/SignerNotificationType"
+          },
+          "SignerNextCoord": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NotaryNextCoord": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "SignAhead": {
+            "type": "boolean"
+          },
+          "Witness": {
+            "type": "boolean"
+          },
+          "AdditionalSignatureVerbiage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Company": {
+            "type": "string",
+            "nullable": true
+          },
+          "ValidationType": {
+            "$ref": "#/components/schemas/SignerValidationType"
+          },
+          "Activated": {
+            "type": "boolean"
+          },
+          "Consented": {
+            "type": "boolean"
+          },
+          "ConsentDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}
